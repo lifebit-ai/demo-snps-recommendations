@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table } from 'antd'
+import { Table, Button, Tag } from 'antd'
 import { withCookies, Cookies } from 'react-cookie'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'antd/dist/antd.css'
@@ -27,7 +27,7 @@ class App extends Component {
     const self = this
     self.setState({ submitting: true })
     event.preventDefault()
-    console.log('eve', event.target.elements)
+    console.log('event', event.target.elements)
     const formData = new FormData()
     formData.append('file', self.state.file)
     axios.post('/api/upload', formData, {
@@ -45,17 +45,22 @@ class App extends Component {
     })
   }
 
+  restart = () => {
+    this.props.cookies.remove(COOKIE_NAME)
+    this.setState({ jobId: null, status: null })
+  }
+
   render() {
     const { file, submitting, jobId, status } = this.state
 
     let content = <FileUploader parent={this} file={file} />
     if (jobId) {
       if (status === 'completed') {
-        content = <Results parent={this} />
+        content = [<Results parent={this} />, <Restart parent={this} />]
       } else if (status === 'failed') {
-        content = <div>Sorry the computation of your file failed</div>
+        content = [<div>Sorry the computation of your file failed</div>, <Restart parent={this} />]
       } else {
-        content = <JobStatus parent={this} />
+        content = [<JobStatus parent={this} />, <Restart parent={this} />]
       }
     }
     return (
@@ -65,6 +70,7 @@ class App extends Component {
           <div className="col-12 text-center">
             <h1 className="mt-5">LifeBit demo app</h1>
             {content}
+
           </div>
         </div>
       </div>
@@ -86,6 +92,8 @@ const FileUploader = ({ parent, file }) => (
     <button className="btn btn-lg btn-primary btn-block" disabled={file ? false : 'disabled'} type="submit" value="Submit">Send</button>
   </form>
 )
+
+const Restart = ({ parent }) => <Button type="primary" size="large" onClick={parent.restart}>Restart</Button>
 
 class JobStatus extends Component { // eslint-disable-line
   constructor(props) {
@@ -115,9 +123,10 @@ class JobStatus extends Component { // eslint-disable-line
   }
 
   render() {
+    const { status } = this.state
     return (
       <div>
-        Computing your results. Please wait ...
+        Computing your results. Please wait ... { status ? 'Your job is ' : null } { status ? <Tag>{status}</Tag> : null }
       </div>
     )
   }
