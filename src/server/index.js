@@ -122,4 +122,4 @@ app.get('/api/job/results', async (req, res) => {
   }
 })
 
-app.listen(config.get('app.port'), () => console.log(`Listening on port ${config.get('app.port')}!`))
+app.listen(process.env.PORT || config.get('app.port'), () => console.log(`Listening on port ${process.env.PORT || config.get('app.port')}!`))
