@@ -46,7 +46,7 @@ function LifeBitUtility(apikey) {
       }
     ]
     const data = {
-      command: 'get_nutrition_snps.py',
+      command: config.get('lifebit.command'),
       workflow: config.get('lifebit.workflow'),
       project: config.get('lifebit.project'),
       instanceType: config.get('lifebit.instanceType'),

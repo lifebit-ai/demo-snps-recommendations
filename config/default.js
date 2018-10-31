@@ -10,9 +10,10 @@ module.exports = {
     region: process.env.AWS_REGION || 'eu-west-1',
   },
   lifebit: {
-    workflow: '5bd2139f109dc900a34cdb0a',
+    workflow: '69a79e0a1e273dac36ecfa3a', // '5bd2139f109dc900a34cdb0a',
     project: '5bd2149e109dc900a34cdb0c',
     apikey: 'TODO',
-    instanceType: 'c5.large'
+    instanceType: 'c5.large',
+    command: process.env.LIFEBIT_COMMAND || 'get_nutrition_snps.py'
   }
 }
